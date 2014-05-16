@@ -24,8 +24,15 @@ public class GUI extends JavaPlugin implements Listener {
 	public static ArrayList<String> otherteam = new ArrayList<String>();
  
     private Inventory i;
+    private ItemStack chest;
  
     public void createGUI() {
+    	
+    	ItemStack chest = new ItemStack(Material.CHEST);
+        ItemMeta chestmeta = chest.getItemMeta();
+        chestmeta.setDisplayName(ChatColor.GOLD + "Team Chooser");
+        chest.setItemMeta(chestmeta);
+    	
         this.i = Bukkit.createInventory(null, 9, "Team Chooser");
  
         ItemStack terrorist = new ItemStack(Material.DIAMOND_SWORD);
@@ -41,6 +48,7 @@ public class GUI extends JavaPlugin implements Listener {
         this.i.setItem(4, terrorist);
         this.i.setItem(6, swat);
     }
+    
     @EventHandler
     public void onClick(InventoryClickEvent e) {
         if(!(e.getInventory().getName().equalsIgnoreCase("Team Chooser"))) return;
@@ -61,10 +69,11 @@ public class GUI extends JavaPlugin implements Listener {
             break;
         }
     }
+    
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.getInventory().addItem(new ItemStack(Material.CHEST));
+        player.getInventory().addItem(chest);
     }
  
     @EventHandler
@@ -73,7 +82,12 @@ public class GUI extends JavaPlugin implements Listener {
         ItemStack is = e.getItem();
         if(a==Action.PHYSICAL || is == null || is.getType()==Material.AIR) return;
             if(is.getType()==Material.CHEST) {
-                e.getPlayer().openInventory(this.i);
+            	if(is.getItemMeta() != null && is.getItemMeta().getDisplayName() != null){
+            		if(is.getItemMeta().getDisplayName().equals(ChatColor.GOLD+"Team Chooser"){
+            			 e.getPlayer().openInventory(this.i);
+            		}
+            	}
+               
             }
         }
 }
